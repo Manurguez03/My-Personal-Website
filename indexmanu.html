@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Performance Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Animated background effect - stadium lights blur */
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(30, 136, 229, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: #7f8c8d;
+            margin-bottom: 40px;
+            font-weight: 400;
+        }
+
+        /* Main performance card */
+        .performance-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            min-height: 350px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .performance-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.2);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translateY(-5px) scale(1); }
+            50% { transform: translateY(-5px) scale(1.02); }
+        }
+
+        /* Gauge/Dashboard visual */
+        .gauge-container {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+
+        .gauge-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1E88E5 0%, #00C853 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(30, 136, 229, 0.3);
+            transition: all 0.4s ease;
+        }
+
+        .gauge-inner {
+            width: 85%;
+            height: 85%;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .gauge-value {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1E88E5 0%, #00C853 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gauge-label {
+            font-size: 0.75rem;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
+
+        /* Content modes */
+        .card-content {
+            width: 100%;
+            text-align: left;
+        }
+
+        .card-content h2 {
+            color: #1E88E5;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .card-content p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .card-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .card-link {
+            display: block;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #1E88E5 0%, #00C853 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .card-link:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(30, 136, 229, 0.4);
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .project-card {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #1E88E5;
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .project-card h3 {
+            color: #2c3e50;
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .project-card p {
+            color: #7f8c8d;
+            font-size: 0.85rem;
+            margin: 0;
+        }
+
+        /* Navigation dots */
+        .nav-dots {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 25px;
+        }
+
+        .nav-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ddd;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot.active {
+            background: #1E88E5;
+            width: 30px;
+            border-radius: 5px;
+        }
+
+        .instruction {
+            margin-top: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 0.85rem;
+            z-index: 1;
+        }
+
+        /* Hide content initially */
+        .hidden {
+            display: none;
+        }
+
+        /* Responsive design */
+        @media (max-width: 600px) {
+            .title {
+                font-size: 1.5rem;
+            }
+
+            .performance-card {
+                padding: 30px 20px;
+                min-height: 300px;
+            }
+
+            .gauge-container {
+                width: 150px;
+                height: 150px;
+            }
+
+            .gauge-value {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">The Performance Dashboard</h1>
+        <p class="subtitle">Sports Analytics Enthusiast</p>
+
+        <div class="performance-card" id="performanceCard">
+            <!-- Default Gauge View -->
+            <div id="gaugeView">
+                <div class="gauge-container">
+                    <div class="gauge-circle">
+                        <div class="gauge-inner">
+                            <div class="gauge-value">100</div>
+                            <div class="gauge-label">Performance</div>
+                        </div>
+                    </div>
+                </div>
+                <p class="instruction">Click to analyze performance</p>
+            </div>
+
+            <!-- Profile Mode -->
+            <div id="profileView" class="card-content hidden">
+                <h2>👤 Profile</h2>
+                <p>
+                    <!-- EDIT THIS: Add your introduction -->
+                    Hi! I'm an athlete passionate about leveraging data analytics to optimize performance. 
+                    I combine my love for sports with technical skills to uncover insights that drive results.
+                </p>
+                <p>
+                    <!-- EDIT THIS: Add more about yourself -->
+                    My focus areas include performance tracking, injury prevention analytics, and game strategy optimization.
+                </p>
+            </div>
+
+            <!-- Resume Mode -->
+            <div id="resumeView" class="card-content hidden">
+                <h2>📄 Resume</h2>
+                <p>View my professional experience and qualifications.</p>
+                <div class="card-links">
+                    <!-- EDIT THIS: Update the resume link -->
+                    <a href="https://drive.google.com/your-resume-link" target="_blank" class="card-link">
+                        📥 Download Resume (PDF)
+                    </a>
+                    <!-- EDIT THIS: Update the Google Drive link -->
+                    <a href="https://drive.google.com/your-drive-link" target="_blank" class="card-link">
+                        📂 View on Google Drive
+                    </a>
+                </div>
+            </div>
+
+            <!-- LinkedIn Mode -->
+            <div id="linkedinView" class="card-content hidden">
+                <h2>💼 LinkedIn</h2>
+                <p>Connect with me professionally and see my career journey.</p>
+                <div class="card-links">
+                    <!-- EDIT THIS: Update your LinkedIn profile URL -->
+                    <a href="https://www.linkedin.com/in/your-profile" target="_blank" class="card-link">
+                        🔗 Visit LinkedIn Profile
+                    </a>
+                </div>
+            </div>
+
+            <!-- Projects Mode -->
+            <div id="projectsView" class="card-content hidden">
+                <h2>🚀 Projects</h2>
+                <div class="project-grid">
+                    <!-- EDIT THIS: Update project details and links -->
+                    <a href="https://github.com/your-project-1" target="_blank" style="text-decoration: none; color: inherit;">
+                        <div class="project-card">
+                            <h3>Performance Tracker</h3>
+                            <p>Real-time athlete performance monitoring system</p>
+                        </div>
+                    </a>
+                    
+                    <a href="https://github.com/your-project-2" target="_blank" style="text-decoration: none; color: inherit;">
+                        <div class="project-card">
+                            <h3>Game Analytics Dashboard</h3>
+                            <p>Interactive visualization of game statistics</p>
+                        </div>
+                    </a>
+                    
+                    <a href="https://github.com/your-project-3" target="_blank" style="text-decoration: none; color: inherit;">
+                        <div class="project-card">
+                            <h3>Injury Prevention Model</h3>
+                            <p>ML model predicting injury risk factors</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Navigation Dots -->
+            <div class="nav-dots">
+                <div class="nav-dot active" data-view="gauge"></div>
+                <div class="nav-dot" data-view="profile"></div>
+                <div class="nav-dot" data-view="resume"></div>
+                <div class="nav-dot" data-view="linkedin"></div>
+                <div class="nav-dot" data-view="projects"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <!-- EDIT THIS: Update with your name -->
+        Created by [Your Name] · Sports Analytics Enthusiast
+    </footer>
+
+    <script>
+        // View management system
+        const views = ['gauge', 'profile', 'resume', 'linkedin', 'projects'];
+        let currentViewIndex = 0;
+
+        const card = document.getElementById('performanceCard');
+        const dots = document.querySelectorAll('.nav-dot');
+
+        // Function to show a specific view
+        function showView(viewName) {
+            // Hide all views
+            document.getElementById('gaugeView').classList.add('hidden');
+            document.getElementById('profileView').classList.add('hidden');
+            document.getElementById('resumeView').classList.add('hidden');
+            document.getElementById('linkedinView').classList.add('hidden');
+            document.getElementById('projectsView').classList.add('hidden');
+
+            // Show the selected view
+            document.getElementById(viewName + 'View').classList.remove('hidden');
+
+            // Update active dot
+            dots.forEach((dot, index) => {
+                if (dot.dataset.view === viewName) {
+                    dot.classList.add('active');
+                    currentViewIndex = index;
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+
+        // Click on card to cycle through views
+        card.addEventListener('click', (e) => {
+            // Don't cycle if clicking on a link
+            if (e.target.tagName === 'A' || e.target.closest('a')) {
+                return;
+            }
+
+            currentViewIndex = (currentViewIndex + 1) % views.length;
+            showView(views[currentViewIndex]);
+        });
+
+        // Click on dots to jump to specific view
+        dots.forEach(dot => {
+            dot.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent card click event
+                showView(dot.dataset.view);
+            });
+        });
+
+        // Optional: Keyboard navigation (arrow keys)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                currentViewIndex = (currentViewIndex + 1) % views.length;
+                showView(views[currentViewIndex]);
+            } else if (e.key === 'ArrowLeft') {
+                currentViewIndex = (currentViewIndex - 1 + views.length) % views.length;
+                showView(views[currentViewIndex]);
+            }
+        });
+    </script>
+</body>
+</html>
