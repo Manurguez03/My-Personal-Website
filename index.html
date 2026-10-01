@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Performance Dashboard</title>
+    <meta name="description" content="Explore Manuel Rodriguez's profile, resume, LinkedIn, and data science projects.">
+    <meta property="og:title" content="Manuel Rodriguez | Performance Dashboard">
+    <meta property="og:description" content="Explore Manuel Rodriguez's profile, resume, LinkedIn, and data science projects.">
+    <meta property="og:type" content="website">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E📊%3C/text%3E%3C/svg%3E">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -83,6 +88,12 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+        }
+
+        .performance-card:focus-visible,
+        .nav-dot:focus-visible {
+            outline: 3px solid #1E88E5;
+            outline-offset: 4px;
         }
 
         .performance-card:hover {
@@ -195,11 +206,15 @@
         }
 
         .project-card {
+            display: block;
             padding: 15px;
             background: #f8f9fa;
             border-radius: 10px;
             border-left: 4px solid #1E88E5;
             transition: all 0.3s ease;
+            color: inherit;
+            text-align: left;
+            text-decoration: none;
         }
 
         .project-card:hover {
@@ -234,6 +249,8 @@
             background: #ddd;
             cursor: pointer;
             transition: all 0.3s ease;
+            border: 0;
+            padding: 0;
         }
 
         .nav-dot.active {
@@ -285,6 +302,41 @@
                 font-size: 2.5rem;
             }
         }
+
+        @media (max-width: 400px) {
+            body {
+                padding: 12px;
+            }
+
+            .title {
+                font-size: 1.35rem;
+            }
+
+            .performance-card {
+                padding: 24px 16px;
+            }
+
+            .gauge-container {
+                width: 130px;
+                height: 130px;
+            }
+
+            footer {
+                padding: 0 12px;
+                font-size: 0.75rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -292,9 +344,9 @@
         <h1 class="title">Manuel Rodriguez Dashboard</h1>
         <p class="subtitle">Data Science Graduate Student</p>
 
-        <div class="performance-card" id="performanceCard">
+        <div class="performance-card" id="performanceCard" role="button" tabindex="0" aria-label="Explore dashboard views">
             <!-- Default Gauge View -->
-            <div id="gaugeView">
+            <div data-view-panel="gauge">
                 <div class="gauge-container">
                     <div class="gauge-circle">
                         <div class="gauge-inner">
@@ -303,11 +355,11 @@
                         </div>
                     </div>
                 </div>
-                <p class="instruction">Click to analyze performance</p>
+                <p class="instruction">Click or press Enter/Space to explore · use ←/→ to navigate</p>
             </div>
 
             <!-- Profile Mode -->
-            <div id="profileView" class="card-content hidden">
+            <div class="card-content hidden" data-view-panel="profile">
                 <h2>👤 Profile</h2>
                 <p>
                     <!-- EDIT THIS: Add your introduction -->
@@ -322,55 +374,51 @@
             </div>
 
             <!-- Resume Mode -->
-            <div id="resumeView" class="card-content hidden">
+            <div class="card-content hidden" data-view-panel="resume">
                 <h2>📄 Resume</h2>
                 <p>View my professional experience and qualifications.</p>
                 <div class="card-links">
                     <!-- EDIT THIS: Update the resume link -->
-                    <a href="Resume_Manu_rguez.pdf" target="_blank" class="card-link">
+                    <a href="Resume_Manu_rguez.pdf" target="_blank" rel="noopener noreferrer" class="card-link">📄 Download Resume</a>
                 </div>
             </div>
 
             <!-- LinkedIn Mode -->
-            <div id="linkedinView" class="card-content hidden">
+            <div class="card-content hidden" data-view-panel="linkedin">
                 <h2>💼 LinkedIn</h2>
                 <p>Connect with me professionally and see my career journey.</p>
                 <div class="card-links">
                     <!-- EDIT THIS: Update your LinkedIn profile URL -->
-                    <a href="https://www.linkedin.com/in/manuelrodriguezberdud" target="_blank" class="card-link">
+                    <a href="https://www.linkedin.com/in/manuelrodriguezberdud" target="_blank" rel="noopener noreferrer" class="card-link">
                         🔗 Visit LinkedIn Profile
                     </a>
                 </div>
             </div>
 
             <!-- Projects Mode -->
-            <div id="projectsView" class="card-content hidden">
+            <div class="card-content hidden" data-view-panel="projects">
                 <h2>🚀 Projects</h2>
                 <div class="project-grid">
                     <!-- EDIT THIS: Update project details and links -->
-                   <a href="FINAL_Project Report.pdf" target="_blank" class="card-link">
-                        <div class="project-card">
-                            <h3>ML Model Predicting Tennis Match Upsets</h3>
-                            <p>Computational Data Analysis Project</p>
-                        </div>
+                    <a href="FINAL_Project Report.pdf" target="_blank" rel="noopener noreferrer" class="project-card">
+                        <h3>ML Model Predicting Tennis Match Upsets</h3>
+                        <p>Computational Data Analysis Project</p>
                     </a>
                     
-                    <a href="FINAL_Group_Project_Report.pdf" target="_blank" class="card-link">
-                        <div class="project-card">
-                            <h3>NYC Crime Patterns and Safety-Aware Travel Advices</h3>
-                            <p>Data Mining Group Project</p>
-                        </div>
+                    <a href="FINAL_Group_Project_Report.pdf" target="_blank" rel="noopener noreferrer" class="project-card">
+                        <h3>NYC Crime Patterns and Safety-Aware Travel Advices</h3>
+                        <p>Data Mining Group Project</p>
                     </a>
                 </div>
             </div>
 
             <!-- Navigation Dots -->
             <div class="nav-dots">
-                <div class="nav-dot active" data-view="gauge"></div>
-                <div class="nav-dot" data-view="profile"></div>
-                <div class="nav-dot" data-view="resume"></div>
-                <div class="nav-dot" data-view="linkedin"></div>
-                <div class="nav-dot" data-view="projects"></div>
+                <button type="button" class="nav-dot active" data-view="gauge" aria-label="Show dashboard view" aria-pressed="true"></button>
+                <button type="button" class="nav-dot" data-view="profile" aria-label="Show profile view" aria-pressed="false"></button>
+                <button type="button" class="nav-dot" data-view="resume" aria-label="Show resume view" aria-pressed="false"></button>
+                <button type="button" class="nav-dot" data-view="linkedin" aria-label="Show LinkedIn view" aria-pressed="false"></button>
+                <button type="button" class="nav-dot" data-view="projects" aria-label="Show projects view" aria-pressed="false"></button>
             </div>
         </div>
     </div>
@@ -382,31 +430,26 @@
 
     <script>
         // View management system
-        const views = ['gauge', 'profile', 'resume', 'linkedin', 'projects'];
+        const panels = document.querySelectorAll('[data-view-panel]');
+        const views = Array.from(panels, panel => panel.dataset.viewPanel);
         let currentViewIndex = 0;
 
         const card = document.getElementById('performanceCard');
         const dots = document.querySelectorAll('.nav-dot');
 
-        // Function to show a specific view
+        // Show a view using the matching panel and navigation data attributes.
         function showView(viewName) {
-            // Hide all views
-            document.getElementById('gaugeView').classList.add('hidden');
-            document.getElementById('profileView').classList.add('hidden');
-            document.getElementById('resumeView').classList.add('hidden');
-            document.getElementById('linkedinView').classList.add('hidden');
-            document.getElementById('projectsView').classList.add('hidden');
-
-            // Show the selected view
-            document.getElementById(viewName + 'View').classList.remove('hidden');
+            panels.forEach(panel => {
+                panel.classList.toggle('hidden', panel.dataset.viewPanel !== viewName);
+            });
 
             // Update active dot
             dots.forEach((dot, index) => {
-                if (dot.dataset.view === viewName) {
-                    dot.classList.add('active');
+                const isActive = dot.dataset.view === viewName;
+                dot.classList.toggle('active', isActive);
+                dot.setAttribute('aria-pressed', String(isActive));
+                if (isActive) {
                     currentViewIndex = index;
-                } else {
-                    dot.classList.remove('active');
                 }
             });
         }
@@ -414,10 +457,20 @@
         // Click on card to cycle through views
         card.addEventListener('click', (e) => {
             // Don't cycle if clicking on a link
-            if (e.target.tagName === 'A' || e.target.closest('a')) {
+            if (e.target.closest('a, button')) {
                 return;
             }
 
+            currentViewIndex = (currentViewIndex + 1) % views.length;
+            showView(views[currentViewIndex]);
+        });
+
+        card.addEventListener('keydown', (e) => {
+            if (e.target !== card || (e.key !== 'Enter' && e.key !== ' ')) {
+                return;
+            }
+
+            e.preventDefault();
             currentViewIndex = (currentViewIndex + 1) % views.length;
             showView(views[currentViewIndex]);
         });
